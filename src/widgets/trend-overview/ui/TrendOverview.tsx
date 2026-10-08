@@ -1,6 +1,6 @@
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, LineChart } from 'lucide-react'
 import type { Timeframe } from '@/entities/market'
-import { BiasLabel, ProbabilityBar } from '@/entities/trend'
+import { BIAS_TONE, BiasLabel, ProbabilityBar } from '@/entities/trend'
 import { cn } from '@/shared/lib'
 import { Skeleton } from '@/shared/ui'
 import { useTrends, type TimeframeTrend } from '../model/useTrends'
@@ -20,12 +20,18 @@ export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps
         <div>
           <p className="text-sm text-on-dark-soft">종합 추세 판단</p>
           {consensus ? (
-            <p className="mt-1 text-[40px] leading-none font-normal tracking-tight sm:text-[52px]">
-              <span className={consensus.bias === 'short' ? 'text-down' : consensus.bias === 'long' ? 'text-up' : ''}>
+            <p
+              className={cn(
+                'mt-3 inline-flex flex-wrap items-baseline gap-x-2 rounded-xl border-2 bg-linear-to-br to-transparent px-5 py-3 text-[40px] leading-none font-normal tracking-tight sm:text-[52px]',
+                BIAS_TONE[consensus.bias].border,
+                BIAS_TONE[consensus.bias].tint,
+              )}
+            >
+              <span className={consensus.bias === 'neutral' ? 'text-on-dark' : BIAS_TONE[consensus.bias].text}>
                 {consensus.bias === 'long' ? '롱' : consensus.bias === 'short' ? '숏' : '관망 추천'}
-              </span>{' '}
+              </span>
               {consensus.bias === 'neutral' ? (
-                <span className="ml-1 text-base text-on-dark-soft">
+                <span className="text-base text-on-dark-soft">
                   방향성 약함 · {consensus.probLong >= 50 ? '롱' : '숏'}{' '}
                   <span className="font-mono">{Math.max(consensus.probLong, 100 - consensus.probLong)}%</span>
                 </span>
@@ -63,18 +69,29 @@ export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps
 
 function TrendCard({ trend, active, onClick }: { trend: TimeframeTrend; active: boolean; onClick: () => void }) {
   const { timeframe, result, isLoading, isError } = trend
+  const tone = result ? BIAS_TONE[result.bias] : null
 
   return (
     <button
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'cursor-pointer rounded-xl bg-surface-dark-elevated p-5 text-left transition-colors last:col-span-2 md:last:col-span-1',
-        active ? 'ring-2 ring-primary' : 'ring-1 ring-transparent hover:ring-white/15',
+        'cursor-pointer rounded-xl border-2 bg-surface-dark-elevated bg-linear-to-b to-transparent p-5 text-left transition-[box-shadow,border-color,translate] duration-200 last:col-span-2 md:last:col-span-1',
+        tone ? [tone.border, tone.tint] : 'border-white/10',
+        active
+          ? '-translate-y-1 shadow-[0_12px_32px_rgba(0,82,255,0.35)] ring-2 ring-primary ring-offset-2 ring-offset-surface-dark'
+          : 'hover:ring-1 hover:ring-white/20 hover:ring-offset-2 hover:ring-offset-surface-dark',
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-on-dark">{timeframe.label}</span>
+        {active ? (
+          <span className="inline-flex items-center gap-1 rounded-pill bg-primary px-2.5 py-0.5 text-sm font-semibold text-white">
+            <LineChart className="size-3.5" strokeWidth={2.5} />
+            {timeframe.label}
+          </span>
+        ) : (
+          <span className="py-0.5 text-sm font-semibold text-on-dark">{timeframe.label}</span>
+        )}
         {result?.ranging && (
           <span className="rounded-pill bg-white/10 px-2 py-0.5 text-[11px] text-on-dark-soft">횡보</span>
         )}
