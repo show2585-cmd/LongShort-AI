@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="ko">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-X9Y6WL0W4K"></script>
     <script>
@@ -12,9 +15,37 @@
 
       gtag('config', 'G-X9Y6WL0W4K')
     </script>
-    <meta charset="UTF-8" />
+
+    <!-- SEO 메타: 대문자 토큰은 vite-plugin-seo.ts 가 빌드 시 src/shared/config/site.ts 값으로 치환 -->
+    <title>__SEO_TITLE__</title>
+    <meta name="description" content="__SEO_DESCRIPTION__" />
+    <meta name="keywords" content="__SEO_KEYWORDS__" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="__SEO_URL__/" />
+    <meta name="theme-color" content="__SEO_THEME__" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="__SEO_NAME__" />
+    <meta property="og:locale" content="__SEO_LOCALE__" />
+    <meta property="og:url" content="__SEO_URL__/" />
+    <meta property="og:title" content="__SEO_TITLE__" />
+    <meta property="og:description" content="__SEO_DESCRIPTION__" />
+    <meta property="og:image" content="__SEO_OG_IMAGE__" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="LongShort AI - 코인 롱/숏 추세를 확률로 한눈에" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="__SEO_TITLE__" />
+    <meta name="twitter:description" content="__SEO_DESCRIPTION__" />
+    <meta name="twitter:image" content="__SEO_OG_IMAGE__" />
+
+    <script type="application/ld+json">__SEO_JSON_LD__</script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,10 +56,28 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
     />
-    <title>LongShort AI</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- JS 를 실행하지 않는 크롤러(네이버 등)용 정적 콘텐츠. React 가 마운트되면 대체된다. -->
+      <main style="max-width: 720px; margin: 0 auto; padding: 48px 16px; font-family: system-ui, sans-serif; line-height: 1.6; color: #0a0b0d">
+        <h1>LongShort AI - 코인 롱/숏 추세 확률 분석</h1>
+        <p>
+          비트코인(BTC), 이더리움(ETH), 솔라나(SOL), 리플(XRP), BNB, 도지코인(DOGE) 무기한 선물의 롱/숏 추세를 5분봉 ·
+          15분봉 · 1시간봉 · 4시간봉 · 1일봉 기준으로 각각 확률로 보여줍니다.
+        </p>
+        <h2>제공 기능</h2>
+        <ul>
+          <li>TradingView 실시간 차트</li>
+          <li>타임프레임별 롱/숏 추세 확률과 종합 판단 (롱 우세 · 숏 우세 · 관망 추천)</li>
+          <li>EMA · MACD · RSI · DMI/ADX · 슈퍼트렌드 · 시장 구조 · OBV 기반 판단 근거</li>
+          <li>바이낸스 선물 롱숏 비율 (전체 계정 · 상위 트레이더 포지션 · 테이커 매수/매도)</li>
+          <li>미결제약정 기반 청산맵 (롱/숏 청산 밀집 구간)</li>
+        </ul>
+        <p>LongShort AI 는 거래소 레퍼럴(추천인) 코드, 유료 멤버십, 리딩방을 운영하지 않습니다.</p>
+        <p><small>제공 정보는 투자 권유가 아니며 모든 투자 판단과 책임은 본인에게 있습니다.</small></p>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

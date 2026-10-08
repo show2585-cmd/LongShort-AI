@@ -28,7 +28,7 @@ export function CardHeader({ title, description, action }: CardHeaderProps) {
   return (
     <div className="mb-5 flex items-start justify-between gap-3">
       <div>
-        <h3 className="text-lg leading-snug font-semibold">{title}</h3>
+        <h2 className="text-lg leading-snug font-semibold">{title}</h2>
         {description && <p className="mt-1 text-[13px] text-muted">{description}</p>}
       </div>
       {action}

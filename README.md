@@ -37,6 +37,26 @@ npm run dev
 
 이후 `main` 브랜치에 푸시할 때마다 자동 배포됩니다. 환경 변수는 따로 넣지 않습니다 (`VITE_USE_MOCK` 미설정 = 실데이터).
 
+## SEO
+
+메타데이터 원본은 `src/shared/config/site.ts` 한 곳입니다. `vite-plugin-seo.ts` 가 빌드 시 아래를 처리합니다.
+
+- `index.html` 의 title · description · canonical · Open Graph · Twitter 카드 · JSON-LD(WebSite, WebApplication) 채우기
+- `robots.txt`, `sitemap.xml` 생성
+- 사이트 주소: `VITE_SITE_URL` → 없으면 Vercel 의 `VERCEL_PROJECT_PRODUCTION_URL` 자동 사용
+- `VITE_GOOGLE_SITE_VERIFICATION`, `VITE_NAVER_SITE_VERIFICATION` 이 있으면 소유확인 메타 추가
+
+그 외
+
+- `#root` 안에 정적 소개 콘텐츠를 두어 JS 를 실행하지 않는 크롤러(네이버 Yeti 등)도 내용을 읽도록 함. React 마운트 시 대체됨
+- 선택한 코인에 따라 문서 제목 변경 (예: `Ethereum(ETH) 롱숏 추세 확률 · …`)
+- OG 이미지 `public/og-image.png` (1200×630), 아이콘·manifest
+
+### 배포 후 할 일
+1. [Google Search Console](https://search.google.com/search-console) · [네이버 서치어드바이저](https://searchadvisor.naver.com) 에 사이트 등록
+2. 발급받은 소유확인 값을 Vercel 환경 변수(`VITE_GOOGLE_SITE_VERIFICATION`, `VITE_NAVER_SITE_VERIFICATION`)에 넣고 재배포
+3. 두 곳 모두 `https://<도메인>/sitemap.xml` 제출
+
 ## 추세 확률 산출 방식
 
 `src/entities/trend/model/computeTrend.ts`

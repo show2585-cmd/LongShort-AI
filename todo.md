@@ -21,6 +21,15 @@
   - [ ] Vercel Functions 로그에서 실행 리전이 icn1 인지 확인
 - [ ] 도메인 · HTTPS
 
+### SEO
+- [x] 메타 태그 · OG · Twitter 카드 · JSON-LD · robots.txt · sitemap.xml · manifest · 아이콘
+- [x] JS 미실행 크롤러용 정적 콘텐츠, 코인별 문서 제목, h1/h2 구조
+- [ ] 배포 후 Google Search Console · 네이버 서치어드바이저 등록, 소유확인 환경 변수 설정, sitemap 제출
+- [ ] 커스텀 도메인 연결 시 `VITE_SITE_URL` 지정
+- [ ] 카카오톡 · 슬랙 공유 미리보기(OG 이미지) 확인
+- [ ] 코인별 URL(`/btc`, `/eth` …) + 프리렌더링으로 코인별 검색 유입 확보 검토
+- [ ] 미사용 `public/popup_img.png`(1.5MB) 삭제 — 현재 `popup_img.jpg`(136KB) 사용 중
+
 ### 법적 고지
 - [ ] "확률" 표기 검토 — 현재 값은 백테스트 보정 전 **신호 강도**임. 보정 전까지 "추세 강도" 등으로 표기할지 결정
 - [ ] 투자 권유 아님 면책 문구 법률 검토
@@ -46,7 +55,6 @@
 
 ### UI / UX
 - [ ] 모바일 화면 실기기 확인 (이 환경에서는 창 크기 변경이 되지 않아 미확인)
-- [ ] `popup_img.png` (1.5MB) WebP 변환·압축
 - [ ] 외부 폰트(Google Fonts, Pretendard CDN) 로딩 지연 시 렌더링 차단 문제 → 셀프 호스팅 또는 `display=swap` + preload 검토
 - [ ] API 오류 시 재시도 버튼 / 마지막 갱신 시각 표시
 - [ ] 선택한 코인·타임프레임을 URL 쿼리로 유지 (공유·새로고침 대응)

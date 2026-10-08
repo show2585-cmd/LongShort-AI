@@ -15,7 +15,14 @@ export function NoticePopup() {
       className="max-w-[720px] overflow-hidden bg-surface-dark p-0"
     >
       <div className="relative">
-        <img src="/popup_img.png" alt={ALT} width={1536} height={1024} className="block h-auto w-full" />
+        <img
+          src="/popup_img.jpg"
+          alt={ALT}
+          width={1536}
+          height={1024}
+          decoding="async"
+          className="block h-auto w-full"
+        />
         {/* 이미지에 그려진 X 표시 위치에 실제 닫기 버튼을 겹친다 */}
         <button
           onClick={close}

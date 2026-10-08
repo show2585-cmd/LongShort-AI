@@ -1,3 +1,5 @@
+export { SITE, symbolPageTitle } from './site'
+
 export const APP_NAME = 'LongShort AI'
 
 // Binance USDT-M 선물 공개 API. 개발 환경에서는 vite proxy(/binance)를 통해 CORS 를 우회하고,
