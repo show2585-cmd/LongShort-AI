@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+
+/* DESIGN-coinbase.md 토큰 */
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+  --color-primary: #0052ff;
+  --color-primary-active: #003ecc;
+  --color-primary-disabled: #a8b8cc;
+  --color-ink: #0a0b0d;
+  --color-body: #5b616e;
+  --color-muted: #7c828a;
+  --color-muted-soft: #a8acb3;
+  --color-hairline: #dee1e6;
+  --color-hairline-soft: #eef0f3;
+  --color-canvas: #ffffff;
+  --color-surface-soft: #f7f7f7;
+  --color-surface-strong: #eef0f3;
+  --color-surface-dark: #0a0b0d;
+  --color-surface-dark-elevated: #16181c;
+  --color-on-dark: #ffffff;
+  --color-on-dark-soft: #a8acb3;
+  --color-up: #05b169;
+  --color-down: #cf202f;
+  --color-accent-yellow: #f4b000;
+
+  --font-sans: 'Inter', 'Pretendard Variable', Pretendard, -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 100px;
+
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+    word-break: keep-all;
+  }
+}
