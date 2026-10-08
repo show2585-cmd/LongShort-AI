@@ -1,11 +1,11 @@
-import { Minus, TrendingDown, TrendingUp } from 'lucide-react'
+import { Eye, TrendingDown, TrendingUp } from 'lucide-react'
 import { cn } from '@/shared/lib'
 import type { TrendBias } from '../model/computeTrend'
 
 const config = {
   long: { text: '롱 우세', icon: TrendingUp, className: 'text-up' },
   short: { text: '숏 우세', icon: TrendingDown, className: 'text-down' },
-  neutral: { text: '중립', icon: Minus, className: 'text-muted-soft' },
+  neutral: { text: '관망 추천', icon: Eye, className: 'text-muted-soft' },
 } as const
 
 export function BiasLabel({ bias, className }: { bias: TrendBias; className?: string }) {

@@ -70,6 +70,15 @@ src/
 └── shared/     api(binance, mock), lib(지표, 포맷), ui(Button, Card, Modal, Segmented …), config
 ```
 
+### 데이터 패칭 규칙
+
+모든 서버 데이터는 **TanStack Query(react-query)** 로 가져옵니다. 컴포넌트에서 `fetch` 를 직접 호출하거나 `useEffect` 로 데이터를 불러오지 않습니다.
+
+- `shared/api` — 순수 요청 함수 (`fetchKlines` 등). React 의존성 없음
+- `entities/*/api/queries.ts` — `useQuery` 훅과 `xxxQueryOptions` (queryKey · queryFn · refetchInterval 정의)
+- 여러 쿼리를 한 번에 써야 하면 `useQueries` + `xxxQueryOptions` 조합 (예: `widgets/trend-overview/model/useTrends.ts`)
+- 응답 가공은 `select` 또는 `useMemo` 로 처리
+
 ### Import 규칙 (ESLint로 강제)
 
 - 상위 레이어만 하위 레이어를 import: `app → pages → widgets → features → entities → shared`

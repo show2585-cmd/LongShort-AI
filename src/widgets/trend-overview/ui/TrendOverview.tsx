@@ -22,14 +22,16 @@ export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps
           {consensus ? (
             <p className="mt-1 text-[40px] leading-none font-normal tracking-tight sm:text-[52px]">
               <span className={consensus.bias === 'short' ? 'text-down' : consensus.bias === 'long' ? 'text-up' : ''}>
-                {consensus.bias === 'long' ? '롱' : consensus.bias === 'short' ? '숏' : '중립'}
+                {consensus.bias === 'long' ? '롱' : consensus.bias === 'short' ? '숏' : '관망 추천'}
               </span>{' '}
-              <span className="font-mono text-[32px] sm:text-[40px]">
-                {Math.max(consensus.probLong, 100 - consensus.probLong)}%
-              </span>
-              {consensus.bias === 'neutral' && (
-                <span className="ml-2 text-base text-on-dark-soft">
-                  ({consensus.probLong >= 50 ? '롱' : '숏'} 쪽 약간 우세)
+              {consensus.bias === 'neutral' ? (
+                <span className="ml-1 text-base text-on-dark-soft">
+                  방향성 약함 · {consensus.probLong >= 50 ? '롱' : '숏'}{' '}
+                  <span className="font-mono">{Math.max(consensus.probLong, 100 - consensus.probLong)}%</span>
+                </span>
+              ) : (
+                <span className="font-mono text-[32px] sm:text-[40px]">
+                  {Math.max(consensus.probLong, 100 - consensus.probLong)}%
                 </span>
               )}
             </p>
