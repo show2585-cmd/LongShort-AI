@@ -1,5 +1,6 @@
 import { Mail } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { SupportButton } from '@/features/support-developer'
 import { APP_NAME, CONTACT_EMAIL } from '@/shared/config'
 import { Logo } from '@/shared/ui'
 
@@ -25,6 +26,7 @@ export function Footer() {
                 {l.label}
               </Link>
             ))}
+            <SupportButton variant="link" />
           </nav>
         </div>
 

@@ -1,4 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
+import { SupportButton } from '@/features/support-developer'
 import { APP_NAME, USE_MOCK } from '@/shared/config'
 import { Badge, Logo } from '@/shared/ui'
 
@@ -22,6 +23,7 @@ export function Header() {
               서비스 소개
             </NavLink>
           </nav>
+          <SupportButton />
         </div>
       </div>
     </header>
