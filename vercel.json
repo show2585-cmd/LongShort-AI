@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "regions": ["icn1"],
+  "rewrites": [
+    { "source": "/binance/:path*", "destination": "/api/binance?path=:path*" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}

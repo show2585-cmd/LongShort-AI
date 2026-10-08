@@ -15,10 +15,10 @@
 - [ ] Binance API 요청 한도(weight) 점검 — 현재 사용자 1명당 30초~5분 주기로 약 10개 엔드포인트 호출
 
 ### 배포 인프라
-- [ ] `/binance` → `https://fapi.binance.com` 리버스 프록시 구성 (nginx / Vercel rewrites / Cloudflare Workers 중 선택)
-  - [ ] 프록시 서버 리전 확인 (미국 IP 는 Binance 차단)
-  - [ ] 서버측 캐시(10~30초) 적용 → 사용자 수와 무관하게 API 호출 수 고정
-- [ ] 호스팅 결정 및 배포 파이프라인 구성
+- [x] `/binance` → `https://fapi.binance.com` 프록시 (`vercel.json` + `api/binance.ts`, 서울 리전, CDN 캐시 10초)
+- [ ] Vercel 에 저장소 연결 후 첫 배포
+  - [ ] 배포 후 `/binance/fapi/v1/klines?symbol=BTCUSDT&interval=1h&limit=2` 가 JSON 을 반환하는지 확인 (451 이면 리전 문제)
+  - [ ] Vercel Functions 로그에서 실행 리전이 icn1 인지 확인
 - [ ] 도메인 · HTTPS
 
 ### 법적 고지

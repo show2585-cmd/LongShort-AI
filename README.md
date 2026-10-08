@@ -21,7 +21,21 @@ npm run dev
 | 롱/숏 비율 | Binance `/futures/data/globalLongShortAccountRatio`, `topLongShortPositionRatio`, `takerlongshortRatio` | 무료·키 불필요, 최근 30일만 제공 |
 | 청산 맵 | Binance `/futures/data/openInterestHist` + 1시간봉으로 **자체 추정** | 아래 참고 |
 
-개발 서버는 `/binance` → `https://fapi.binance.com` 프록시를 사용합니다. **운영 배포 시에도 같은 경로의 리버스 프록시(nginx, Vercel rewrites 등)가 필요**합니다. 미국 IP 는 Binance 가 차단하므로 프록시 서버 리전에 주의하세요.
+프론트엔드는 항상 `/binance/*` 경로로 요청하고, 환경별로 아래가 `https://fapi.binance.com` 으로 중계합니다.
+
+- **개발:** `vite.config.ts` 의 dev proxy
+- **운영(Vercel):** `vercel.json` rewrite → `api/binance.ts` 함수
+  - 서울 리전(`icn1`)에서 실행 → 미국 IP 차단(451) 회피
+  - 허용된 공개 엔드포인트 6개만 중계 (오픈 프록시 방지)
+  - CDN 캐시 `s-maxage=10` → 사용자 수가 늘어도 Binance 호출 수 제한
+
+## 배포 (Vercel)
+
+1. https://vercel.com 에 GitHub 계정으로 로그인
+2. Add New → Project → `LongShort-AI` 저장소 선택
+3. 설정 변경 없이 Deploy (`vercel.json` 이 프레임워크·리전·rewrite 를 지정)
+
+이후 `main` 브랜치에 푸시할 때마다 자동 배포됩니다. 환경 변수는 따로 넣지 않습니다 (`VITE_USE_MOCK` 미설정 = 실데이터).
 
 ## 추세 확률 산출 방식
 
