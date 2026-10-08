@@ -19,16 +19,26 @@
 - [ ] Vercel 에 저장소 연결 후 첫 배포
   - [ ] 배포 후 `/binance/fapi/v1/klines?symbol=BTCUSDT&interval=1h&limit=2` 가 JSON 을 반환하는지 확인 (451 이면 리전 문제)
   - [ ] Vercel Functions 로그에서 실행 리전이 icn1 인지 확인
-- [ ] 도메인 · HTTPS
+- [ ] 도메인 · HTTPS — `longshort-ai.com` (가비아) Vercel 연결, Valid Configuration · 인증서 확인
 
 ### SEO
 - [x] 메타 태그 · OG · Twitter 카드 · JSON-LD · robots.txt · sitemap.xml · manifest · 아이콘
 - [x] JS 미실행 크롤러용 정적 콘텐츠, 코인별 문서 제목, h1/h2 구조
 - [ ] 배포 후 Google Search Console · 네이버 서치어드바이저 등록, 소유확인 환경 변수 설정, sitemap 제출
-- [ ] 커스텀 도메인 연결 시 `VITE_SITE_URL` 지정
+- [x] 사이트 주소 `https://longshort-ai.com` 을 `SITE.url` 기본값으로 지정
 - [ ] 카카오톡 · 슬랙 공유 미리보기(OG 이미지) 확인
 - [ ] 코인별 URL(`/btc`, `/eth` …) + 프리렌더링으로 코인별 검색 유입 확보 검토
 - [ ] 미사용 `public/popup_img.png`(1.5MB) 삭제 — 현재 `popup_img.jpg`(136KB) 사용 중
+
+### 애드센스
+- [x] 개인정보처리방침 · 이용약관 · 서비스 소개 페이지
+- [x] 애드센스 스크립트 · 소유확인 메타 · ads.txt 자동 생성, 광고 슬롯 컴포넌트
+- [ ] 가비아 DNS 설정 (A `@` → Vercel IP, CNAME `www` → Vercel) 후 연결 확인
+- [ ] 애드센스 가입 · 사이트 등록 → Vercel 에 `VITE_ADSENSE_CLIENT` 설정 후 재배포 → 심사 신청
+- [ ] 개인정보처리방침 보호책임자 실명 기재 여부 결정, 법률 검토
+- [ ] 가이드 글 콘텐츠 추가 (롱숏 비율 보는 법, 청산맵이란, 지표 설명 등) — 승인 확률 향상
+- [ ] 승인 후 광고 단위 2개 생성 → `VITE_ADSENSE_SLOT_SIDEBAR`, `VITE_ADSENSE_SLOT_CONTENT` 설정
+- [ ] 애드센스 "개인정보 보호 및 메시지"에서 EU/UK 동의 메시지 활성화
 
 ### 법적 고지
 - [ ] "확률" 표기 검토 — 현재 값은 백테스트 보정 전 **신호 강도**임. 보정 전까지 "추세 강도" 등으로 표기할지 결정

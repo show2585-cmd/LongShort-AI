@@ -43,7 +43,7 @@ npm run dev
 
 - `index.html` 의 title · description · canonical · Open Graph · Twitter 카드 · JSON-LD(WebSite, WebApplication) 채우기
 - `robots.txt`, `sitemap.xml` 생성
-- 사이트 주소: `VITE_SITE_URL` → 없으면 Vercel 의 `VERCEL_PROJECT_PRODUCTION_URL` 자동 사용
+- 사이트 주소: `SITE.url`(https://longshort-ai.com), `VITE_SITE_URL` 로 덮어쓰기 가능
 - `VITE_GOOGLE_SITE_VERIFICATION`, `VITE_NAVER_SITE_VERIFICATION` 이 있으면 소유확인 메타 추가
 
 그 외
@@ -51,6 +51,13 @@ npm run dev
 - `#root` 안에 정적 소개 콘텐츠를 두어 JS 를 실행하지 않는 크롤러(네이버 Yeti 등)도 내용을 읽도록 함. React 마운트 시 대체됨
 - 선택한 코인에 따라 문서 제목 변경 (예: `Ethereum(ETH) 롱숏 추세 확률 · …`)
 - OG 이미지 `public/og-image.png` (1200×630), 아이콘·manifest
+
+## 정책 페이지 · 애드센스
+
+- 페이지: `/about`(서비스 소개·분석 방법), `/terms`(이용약관), `/privacy`(개인정보처리방침). 경로를 추가하면 `vite-plugin-seo.ts` 의 `SITEMAP_PATHS` 도 갱신
+- `VITE_ADSENSE_CLIENT=ca-pub-…` 를 넣고 빌드하면 애드센스 스크립트 · `google-adsense-account` 메타 · `ads.txt` 가 자동 생성
+- 광고 위치: 판단 근거 카드 아래(`VITE_ADSENSE_SLOT_CONTENT`), 사이드바 하단(`VITE_ADSENSE_SLOT_SIDEBAR`). 값이 없으면 렌더링하지 않음 (`shared/ui/ad-slot`)
+- 차트·타임프레임 카드 주변에는 오클릭 유도 정책 위반 우려로 광고를 두지 않음
 
 ### 배포 후 할 일
 1. [Google Search Console](https://search.google.com/search-console) · [네이버 서치어드바이저](https://searchadvisor.naver.com) 에 사이트 등록

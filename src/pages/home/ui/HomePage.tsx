@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { SYMBOLS, TIMEFRAMES, useTicker24h, type MarketSymbol, type Timeframe } from '@/entities/market'
 import { SymbolSelector } from '@/features/select-symbol'
-import { symbolPageTitle } from '@/shared/config'
-import { cn, formatPercent, formatPrice } from '@/shared/lib'
-import { Skeleton } from '@/shared/ui'
+import { AD_SLOTS, SITE, symbolPageTitle } from '@/shared/config'
+import { cn, formatPercent, formatPrice, usePageMeta } from '@/shared/lib'
+import { AdSlot, Skeleton } from '@/shared/ui'
 import { LiquidationMap } from '@/widgets/liquidation-map'
 import { LongShortRatio } from '@/widgets/long-short-ratio'
 import { TradingViewChart } from '@/widgets/tradingview-chart'
@@ -15,9 +15,7 @@ export function HomePage() {
   const timeframe = TIMEFRAMES.find((t) => t.id === tfId)!
 
   // 선택한 코인에 맞춰 탭 제목 갱신 (공유·북마크·검색 결과 표시용)
-  useEffect(() => {
-    document.title = symbolPageTitle(symbol.base, symbol.name)
-  }, [symbol])
+  usePageMeta({ title: symbolPageTitle(symbol.base, symbol.name), description: SITE.description, path: '/' })
 
   return (
     <>
@@ -43,10 +41,12 @@ export function HomePage() {
           <div className="min-w-0 space-y-6">
             <TradingViewChart symbol={symbol.tradingView} interval={timeframe.tradingView} />
             <TrendBreakdown symbol={symbol.id} timeframe={timeframe} />
+            <AdSlot slot={AD_SLOTS.content} />
           </div>
           <aside className="space-y-6">
             <LongShortRatio symbol={symbol.id} timeframe={timeframe} />
             <LiquidationMap symbol={symbol.id} />
+            <AdSlot slot={AD_SLOTS.sidebar} />
           </aside>
         </div>
       </section>

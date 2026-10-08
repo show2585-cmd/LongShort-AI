@@ -2,6 +2,8 @@
 // import.meta.env 등 브라우저 전용 API 를 쓰지 않는다.
 export const SITE = {
   name: 'LongShort AI',
+  // 운영 도메인 (canonical · og:url · sitemap 기준). VITE_SITE_URL 로 덮어쓸 수 있음
+  url: 'https://longshort-ai.com',
   title: 'LongShort AI - 코인 롱숏 추세 확률 · 롱숏 비율 · 청산맵',
   description:
     '비트코인·이더리움 등 코인 선물의 5분·15분·1시간·4시간·1일봉 롱/숏 추세를 확률로 보여주고, 바이낸스 실시간 롱숏 비율과 청산맵을 함께 제공하는 무료 분석 도구입니다. 레퍼럴·유료 멤버십 없이 운영합니다.',
