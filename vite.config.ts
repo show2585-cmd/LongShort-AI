@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
         siteUrl,
         googleVerification: env.VITE_GOOGLE_SITE_VERIFICATION,
         naverVerification: env.VITE_NAVER_SITE_VERIFICATION,
-        adsenseClient: env.VITE_ADSENSE_CLIENT,
+        adsenseClient: env.VITE_ADSENSE_CLIENT || SITE.adsenseClient,
       }),
     ],
     resolve: {

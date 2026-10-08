@@ -55,7 +55,7 @@ npm run dev
 ## 정책 페이지 · 애드센스
 
 - 페이지: `/about`(서비스 소개·분석 방법), `/terms`(이용약관), `/privacy`(개인정보처리방침). 경로를 추가하면 `vite-plugin-seo.ts` 의 `SITEMAP_PATHS` 도 갱신
-- `VITE_ADSENSE_CLIENT=ca-pub-…` 를 넣고 빌드하면 애드센스 스크립트 · `google-adsense-account` 메타 · `ads.txt` 가 자동 생성
+- 게시자 ID `SITE.adsenseClient`(ca-pub-7896902472721455, `VITE_ADSENSE_CLIENT` 로 덮어쓰기 가능) 로 애드센스 스크립트 · `google-adsense-account` 메타 · `ads.txt` 가 자동 생성
 - 광고 위치: 판단 근거 카드 아래(`VITE_ADSENSE_SLOT_CONTENT`), 사이드바 하단(`VITE_ADSENSE_SLOT_SIDEBAR`). 값이 없으면 렌더링하지 않음 (`shared/ui/ad-slot`)
 - 차트·타임프레임 카드 주변에는 오클릭 유도 정책 위반 우려로 광고를 두지 않음
 
