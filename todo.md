@@ -39,6 +39,7 @@
 - [ ] 개인정보처리방침 보호책임자 실명 기재 여부 결정, 법률 검토
 - [ ] 가이드 글 콘텐츠 추가 (롱숏 비율 보는 법, 청산맵이란, 지표 설명 등) — 승인 확률 향상
 - [x] 카카오페이 송금 링크 연결 (`KAKAOPAY_URL`)
+- [x] 카카오페이 송금 QR 이미지 (`public/kakaopay_qr_square.png`, 원본에서 QR 부분만 정사각형으로 잘라냄)
 - [ ] 승인 후 광고 단위 2개 생성 → `VITE_ADSENSE_SLOT_SIDEBAR`, `VITE_ADSENSE_SLOT_CONTENT` 설정
 - [ ] 애드센스 "개인정보 보호 및 메시지"에서 EU/UK 동의 메시지 활성화
 

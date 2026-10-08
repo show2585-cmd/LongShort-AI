@@ -13,7 +13,9 @@ export const BINANCE_FAPI_URL = import.meta.env.VITE_BINANCE_FAPI_URL || '/binan
 export const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 
 // 개발자 후원(카카오페이 송금 링크). 비어 있으면 후원 팝업에 "준비 중" 표시
-export const KAKAOPAY_URL = 'https://qr.kakaopay.com/Ej9JEsKht'
+export const KAKAOPAY_URL = 'https://qr.kakaopay.com/Ej9JEsKhT'
+// 카카오페이 송금 QR 이미지 (public/ 기준, 정사각형). 원본 kakaopay_qr.png 에서 QR 부분만 잘라낸 것. 파일이 없으면 QR 영역을 숨김
+export const KAKAOPAY_QR_IMAGE = '/kakaopay_qr_square.png'
 
 // Google AdSense (광고 단위 ID 미설정 시 해당 광고 영역을 렌더링하지 않음)
 export const ADSENSE_CLIENT = import.meta.env.VITE_ADSENSE_CLIENT || SITE.adsenseClient

@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { Coffee, X } from 'lucide-react'
-import { KAKAOPAY_URL } from '@/shared/config'
+import { KAKAOPAY_QR_IMAGE, KAKAOPAY_URL } from '@/shared/config'
 import { Modal } from '@/shared/ui'
 
 interface SupportModalProps {
@@ -11,8 +12,11 @@ const kakaoClass =
   'inline-flex h-12 w-full items-center justify-center rounded-pill bg-[#fee500] text-base font-semibold text-[#191919]'
 
 export function SupportModal({ open, onClose }: SupportModalProps) {
+  // QR 이미지 파일이 없으면 영역을 숨기고 송금 버튼만 표시
+  const [qrError, setQrError] = useState(false)
+
   return (
-    <Modal open={open} onClose={onClose} labelledBy="support-title" className="relative max-w-sm text-center">
+    <Modal open={open} onClose={onClose} labelledBy="support-title" className="relative max-w-md text-center">
       <button
         onClick={onClose}
         aria-label="닫기"
@@ -33,7 +37,21 @@ export function SupportModal({ open, onClose }: SupportModalProps) {
         서버 운영과 개발에 큰 힘이 됩니다.
       </p>
 
-      <div className="mt-6">
+      {!qrError && (
+        <figure className="mx-auto mt-6 w-fit rounded-lg border border-hairline p-3">
+          <img
+            src={KAKAOPAY_QR_IMAGE}
+            alt="카카오페이 송금 QR 코드"
+            width={576}
+            height={576}
+            onError={() => setQrError(true)}
+            className="block aspect-square w-72 max-w-full"
+          />
+          <figcaption className="mt-2 text-xs text-muted">휴대폰 카메라로 스캔하세요</figcaption>
+        </figure>
+      )}
+
+      <div className={qrError ? 'mt-6' : 'mt-4'}>
         {KAKAOPAY_URL ? (
           <a href={KAKAOPAY_URL} target="_blank" rel="noopener noreferrer" className={kakaoClass}>
             카카오페이로 응원하기
