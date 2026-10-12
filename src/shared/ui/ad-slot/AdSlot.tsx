@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ADSENSE_CLIENT } from '@/shared/config'
 import { cn } from '@/shared/lib'
 
@@ -15,6 +16,7 @@ interface AdSlotProps {
 
 // 반응형 디스플레이 광고 단위. VITE_ADSENSE_CLIENT 와 slot 이 모두 있을 때만 표시
 export function AdSlot({ slot, className }: AdSlotProps) {
+  const { t } = useTranslation()
   const ref = useRef<HTMLModElement>(null)
 
   useEffect(() => {
@@ -31,8 +33,8 @@ export function AdSlot({ slot, className }: AdSlotProps) {
   if (!ADSENSE_CLIENT || !slot) return null
 
   return (
-    <aside aria-label="광고" className={cn('overflow-hidden', className)}>
-      <p className="mb-1 text-[11px] text-muted-soft">광고</p>
+    <aside aria-label={t('common.ad')} className={cn('overflow-hidden', className)}>
+      <p className="mb-1 text-[11px] text-muted-soft">{t('common.ad')}</p>
       <ins
         ref={ref}
         className="adsbygoogle block"

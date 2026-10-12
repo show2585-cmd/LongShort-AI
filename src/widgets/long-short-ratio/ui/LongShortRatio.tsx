@@ -1,13 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import { useLongShortRatio, type Timeframe } from '@/entities/market'
 import { ProbabilityBar } from '@/entities/trend'
 import type { RatioKind } from '@/shared/api'
 import { Card, CardHeader, Skeleton, Sparkline } from '@/shared/ui'
 
-const ROWS: { kind: RatioKind; title: string; hint: string; labels: [string, string] }[] = [
-  { kind: 'globalAccount', title: '전체 계정', hint: '롱/숏 포지션 보유 계정 수 비율', labels: ['롱', '숏'] },
-  { kind: 'topPosition', title: '상위 트레이더 포지션', hint: '증거금 상위 20% 계정의 포지션 규모 비율', labels: ['롱', '숏'] },
-  { kind: 'taker', title: '테이커 매수/매도', hint: '시장가 매수 vs 매도 체결량', labels: ['매수', '매도'] },
-]
+const KINDS: readonly RatioKind[] = ['globalAccount', 'topPosition', 'taker']
 
 interface LongShortRatioProps {
   symbol: string
@@ -15,12 +12,16 @@ interface LongShortRatioProps {
 }
 
 export function LongShortRatio({ symbol, timeframe }: LongShortRatioProps) {
+  const { t } = useTranslation()
   return (
     <Card>
-      <CardHeader title="롱/숏 비율" description={`Binance USDT-M 선물 · ${timeframe.label} 기준`} />
+      <CardHeader
+        title={t('ratio.title')}
+        description={t('ratio.description', { tf: t(`timeframe.${timeframe.id}`) })}
+      />
       <div className="space-y-6">
-        {ROWS.map((row) => (
-          <RatioRow key={row.kind} {...row} symbol={symbol} period={timeframe.id} />
+        {KINDS.map((kind) => (
+          <RatioRow key={kind} kind={kind} symbol={symbol} period={timeframe.id} />
         ))}
       </div>
     </Card>
@@ -29,28 +30,28 @@ export function LongShortRatio({ symbol, timeframe }: LongShortRatioProps) {
 
 interface RatioRowProps {
   kind: RatioKind
-  title: string
-  hint: string
-  labels: [string, string]
   symbol: string
   period: Timeframe['id']
 }
 
-function RatioRow({ kind, title, hint, labels, symbol, period }: RatioRowProps) {
+function RatioRow({ kind, symbol, period }: RatioRowProps) {
+  const { t } = useTranslation()
   const { data, isError } = useLongShortRatio(kind, symbol, period, 48)
   const latest = data?.[data.length - 1]
+  const labels: [string, string] =
+    kind === 'taker' ? [t('common.buy'), t('common.sell')] : [t('common.long'), t('common.short')]
 
   return (
     <div>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold">{title}</p>
-          <p className="text-xs text-muted">{hint}</p>
+          <p className="text-sm font-semibold">{t(`ratio.${kind}.title`)}</p>
+          <p className="text-xs text-muted">{t(`ratio.${kind}.hint`)}</p>
         </div>
         {latest && <span className="font-mono text-sm font-medium">{latest.ratio.toFixed(2)}</span>}
       </div>
       {isError ? (
-        <p className="mt-3 text-xs text-muted">데이터를 불러오지 못했습니다</p>
+        <p className="mt-3 text-xs text-muted">{t('common.loadError')}</p>
       ) : !latest ? (
         <Skeleton className="mt-3 h-10 w-full" />
       ) : (

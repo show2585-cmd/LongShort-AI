@@ -3,6 +3,7 @@ export {
   MIN_CANDLES,
   type TrendBias,
   type TrendFactor,
+  type TrendFactorKey,
   type TrendResult,
 } from './model/computeTrend'
 export { BIAS_TONE } from './model/biasTone'

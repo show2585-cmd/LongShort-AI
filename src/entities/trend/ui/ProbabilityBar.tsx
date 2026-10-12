@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
 interface ProbabilityBarProps {
@@ -7,7 +8,9 @@ interface ProbabilityBarProps {
   tone?: 'light' | 'dark'
 }
 
-export function ProbabilityBar({ long, className, labels = ['롱', '숏'], tone = 'light' }: ProbabilityBarProps) {
+export function ProbabilityBar({ long, className, labels, tone = 'light' }: ProbabilityBarProps) {
+  const { t } = useTranslation()
+  const [longLabel, shortLabel] = labels ?? [t('common.long'), t('common.short')]
   const short = 100 - long
   return (
     <div className={className}>
@@ -22,10 +25,10 @@ export function ProbabilityBar({ long, className, labels = ['롱', '숏'], tone 
         )}
       >
         <span>
-          {labels[0]} <span className="text-up">{long.toFixed(1).replace(/\.0$/, '')}%</span>
+          {longLabel} <span className="text-up">{long.toFixed(1).replace(/\.0$/, '')}%</span>
         </span>
         <span>
-          <span className="text-down">{short.toFixed(1).replace(/\.0$/, '')}%</span> {labels[1]}
+          <span className="text-down">{short.toFixed(1).replace(/\.0$/, '')}%</span> {shortLabel}
         </span>
       </div>
     </div>

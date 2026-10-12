@@ -1,14 +1,17 @@
 import type { Kline } from '@/shared/api'
+import type { Messages } from '@/shared/i18n'
 import { ta } from '@/shared/lib'
 
 export type TrendBias = 'long' | 'short' | 'neutral'
 
+export type TrendFactorKey = keyof Messages['trend']['factors']
+
+// 화면 문구는 UI 에서 trend.factors.<key>, trend.detail.<detail.key> 로 번역
 export interface TrendFactor {
-  key: string
-  name: string
+  key: TrendFactorKey
   weight: number
   value: number // -1(숏) ~ +1(롱)
-  detail: string
+  detail: { key: keyof Messages['trend']['detail']; values?: Record<string, string> }
 }
 
 export interface TrendResult {
@@ -86,28 +89,43 @@ export function computeTrend(klines: Kline[]): TrendResult | null {
   const avgVol = volume.slice(-20).reduce((a, b) => a + b, 0) / 20
   const obvVal = Math.tanh(ta.slope(obvArr) / (avgVol * 0.3))
 
-  const factors: TrendFactor[] = [
+  const cmp = (a: number, b: number) => (a > b ? '>' : '<')
+  const rawFactors: TrendFactor[] = [
     {
       key: 'ema',
-      name: 'EMA 배열 (20/50/200)',
       weight: 0.2,
       value: emaAlign,
-      detail: `종가 ${price > last(e20) ? '>' : '<'} EMA20 · EMA20 ${last(e20) > last(e50) ? '>' : '<'} EMA50 · EMA50 ${last(e50) > last(e200) ? '>' : '<'} EMA200`,
+      detail: {
+        key: 'ema',
+        values: { a: cmp(price, last(e20)), b: cmp(last(e20), last(e50)), c: cmp(last(e50), last(e200)) },
+      },
     },
-    { key: 'slope', name: 'EMA50 기울기', weight: 0.1, value: emaSlope, detail: `10봉 기울기 ${fmt(emaSlope, 2)} (ATR 정규화)` },
-    { key: 'macd', name: 'MACD 히스토그램', weight: 0.15, value: macdVal, detail: `히스토그램 ${h > 0 ? '양수' : '음수'}, ${h > hPrev ? '증가' : '감소'} 중` },
-    { key: 'rsi', name: 'RSI(14)', weight: 0.1, value: rsiVal, detail: `RSI ${fmt(rsi)}` },
-    { key: 'dmi', name: 'DMI / ADX', weight: 0.15, value: dmiClamped, detail: `+DI ${fmt(pdi)} / −DI ${fmt(mdi)} · ADX ${fmt(adx)}` },
-    { key: 'supertrend', name: '슈퍼트렌드 (10, 3)', weight: 0.15, value: st, detail: st > 0 ? '상승 추세 유지' : '하락 추세 유지' },
+    { key: 'slope', weight: 0.1, value: emaSlope, detail: { key: 'slope', values: { v: fmt(emaSlope, 2) } } },
+    {
+      key: 'macd',
+      weight: 0.15,
+      value: macdVal,
+      detail: {
+        key: h > 0 ? (h > hPrev ? 'macdPosRising' : 'macdPosFalling') : h > hPrev ? 'macdNegRising' : 'macdNegFalling',
+      },
+    },
+    { key: 'rsi', weight: 0.1, value: rsiVal, detail: { key: 'rsi', values: { v: fmt(rsi) } } },
+    {
+      key: 'dmi',
+      weight: 0.15,
+      value: dmiClamped,
+      detail: { key: 'dmi', values: { pdi: fmt(pdi), mdi: fmt(mdi), adx: fmt(adx) } },
+    },
+    { key: 'supertrend', weight: 0.15, value: st, detail: { key: st > 0 ? 'supertrendUp' : 'supertrendDown' } },
     {
       key: 'structure',
-      name: '시장 구조 (HH/HL)',
       weight: 0.1,
       value: structure,
-      detail: structure > 0 ? '고점·저점 상승' : structure < 0 ? '고점·저점 하락' : '혼조',
+      detail: { key: structure > 0 ? 'structureUp' : structure < 0 ? 'structureDown' : 'structureMixed' },
     },
-    { key: 'obv', name: 'OBV 거래량 흐름', weight: 0.05, value: obvVal, detail: obvVal > 0 ? '매수 거래량 우위' : '매도 거래량 우위' },
-  ].map((f) => ({ ...f, value: Number.isFinite(f.value) ? f.value : 0 }))
+    { key: 'obv', weight: 0.05, value: obvVal, detail: { key: obvVal > 0 ? 'obvBuy' : 'obvSell' } },
+  ]
+  const factors = rawFactors.map((f) => ({ ...f, value: Number.isFinite(f.value) ? f.value : 0 }))
 
   const score = factors.reduce((s, f) => s + f.value * f.weight, 0)
   const probLong = Math.round(100 / (1 + Math.exp(-LOGISTIC_K * score)))

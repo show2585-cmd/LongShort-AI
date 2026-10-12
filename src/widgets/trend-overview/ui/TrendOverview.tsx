@@ -1,5 +1,6 @@
 import { AlertCircle, LineChart } from 'lucide-react'
-import type { Timeframe } from '@/entities/market'
+import { Trans, useTranslation } from 'react-i18next'
+import { TIMEFRAMES, type Timeframe } from '@/entities/market'
 import { BIAS_TONE, BiasLabel, ProbabilityBar } from '@/entities/trend'
 import { cn } from '@/shared/lib'
 import { Skeleton } from '@/shared/ui'
@@ -12,13 +13,14 @@ interface TrendOverviewProps {
 }
 
 export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps) {
+  const { t } = useTranslation()
   const { trends, consensus } = useTrends(symbol)
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-sm text-on-dark-soft">종합 추세 판단</p>
+          <p className="text-sm text-on-dark-soft">{t('trend.consensus')}</p>
           {consensus ? (
             <p
               className={cn(
@@ -28,11 +30,11 @@ export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps
               )}
             >
               <span className={consensus.bias === 'neutral' ? 'text-on-dark' : BIAS_TONE[consensus.bias].text}>
-                {consensus.bias === 'long' ? '롱' : consensus.bias === 'short' ? '숏' : '관망 추천'}
+                {consensus.bias === 'neutral' ? t('bias.neutral') : t(`common.${consensus.bias}`)}
               </span>
               {consensus.bias === 'neutral' ? (
                 <span className="text-base text-on-dark-soft">
-                  방향성 약함 · {consensus.probLong >= 50 ? '롱' : '숏'}{' '}
+                  {t('trend.weakDirection')} · {consensus.probLong >= 50 ? t('common.long') : t('common.short')}{' '}
                   <span className="font-mono">{Math.max(consensus.probLong, 100 - consensus.probLong)}%</span>
                 </span>
               ) : (
@@ -47,8 +49,11 @@ export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps
         </div>
         {consensus && (
           <p className="text-sm text-on-dark-soft">
-            5개 타임프레임 중 <span className="font-mono text-on-dark">{consensus.agree}</span>개가 같은 방향 · 상위
-            타임프레임 가중
+            <Trans
+              i18nKey="trend.agree"
+              values={{ count: consensus.agree, total: TIMEFRAMES.length }}
+              components={[<span className="font-mono text-on-dark" />]}
+            />
           </p>
         )}
       </div>
@@ -68,7 +73,9 @@ export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps
 }
 
 function TrendCard({ trend, active, onClick }: { trend: TimeframeTrend; active: boolean; onClick: () => void }) {
+  const { t } = useTranslation()
   const { timeframe, result, isLoading, isError } = trend
+  const label = t(`timeframe.${timeframe.id}`)
   const tone = result ? BIAS_TONE[result.bias] : null
 
   return (
@@ -87,19 +94,19 @@ function TrendCard({ trend, active, onClick }: { trend: TimeframeTrend; active: 
         {active ? (
           <span className="inline-flex items-center gap-1 rounded-pill bg-primary px-2.5 py-0.5 text-sm font-semibold text-white">
             <LineChart className="size-3.5" strokeWidth={2.5} />
-            {timeframe.label}
+            {label}
           </span>
         ) : (
-          <span className="py-0.5 text-sm font-semibold text-on-dark">{timeframe.label}</span>
+          <span className="py-0.5 text-sm font-semibold text-on-dark">{label}</span>
         )}
         {result?.ranging && (
-          <span className="rounded-pill bg-white/10 px-2 py-0.5 text-[11px] text-on-dark-soft">횡보</span>
+          <span className="rounded-pill bg-white/10 px-2 py-0.5 text-[11px] text-on-dark-soft">{t('trend.ranging')}</span>
         )}
       </div>
 
       {isError ? (
         <p className="mt-6 flex items-center gap-1.5 text-sm text-on-dark-soft">
-          <AlertCircle className="size-4" /> 데이터를 불러오지 못했습니다
+          <AlertCircle className="size-4" /> {t('common.loadError')}
         </p>
       ) : isLoading || !result ? (
         <div className="mt-4 space-y-3">
@@ -113,7 +120,7 @@ function TrendCard({ trend, active, onClick }: { trend: TimeframeTrend; active: 
             <span className="font-mono text-[28px] leading-tight font-medium">
               {Math.max(result.probLong, result.probShort)}%
             </span>
-            <span className="text-xs text-on-dark-soft">{result.probLong >= result.probShort ? '롱' : '숏'} 확률</span>
+            <span className="text-xs text-on-dark-soft">{result.probLong >= result.probShort ? t('trend.longProb') : t('trend.shortProb')}</span>
           </p>
           <ProbabilityBar long={result.probLong} tone="dark" className="mt-3" />
           <p className="mt-3 font-mono text-[11px] text-on-dark-soft">ADX {result.adx.toFixed(1)}</p>

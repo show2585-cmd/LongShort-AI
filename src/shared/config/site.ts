@@ -24,7 +24,3 @@ export const SITE = {
   themeColor: '#0a0b0d',
   ogImage: '/og-image.png',
 } as const
-
-export function symbolPageTitle(base: string, name: string) {
-  return `${name}(${base}) 롱숏 추세 확률 · 롱숏 비율 · 청산맵 | ${SITE.name}`
-}

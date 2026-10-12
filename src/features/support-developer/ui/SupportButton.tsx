@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Coffee } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { SupportModal } from './SupportModal'
 
@@ -10,13 +11,14 @@ interface SupportButtonProps {
 }
 
 export function SupportButton({ variant = 'pill', className }: SupportButtonProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        aria-label="개발자에게 커피 한 잔"
+        aria-label={t('support.ariaLabel')}
         className={cn(
           'inline-flex cursor-pointer items-center gap-1.5',
           variant === 'pill'
@@ -26,7 +28,7 @@ export function SupportButton({ variant = 'pill', className }: SupportButtonProp
         )}
       >
         <Coffee className={variant === 'pill' ? 'size-4' : 'size-3.5'} />
-        <span className={variant === 'pill' ? 'hidden sm:inline' : undefined}>커피 한 잔</span>
+        <span className={variant === 'pill' ? 'hidden sm:inline' : undefined}>{t('support.button')}</span>
       </button>
       <SupportModal open={open} onClose={() => setOpen(false)} />
     </>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useKlines, type Timeframe } from '@/entities/market'
 import { BiasLabel, computeTrend, type TrendFactor } from '@/entities/trend'
 import { Card, CardHeader, Skeleton } from '@/shared/ui'
@@ -9,14 +10,15 @@ interface TrendBreakdownProps {
 }
 
 export function TrendBreakdown({ symbol, timeframe }: TrendBreakdownProps) {
+  const { t } = useTranslation()
   const { data } = useKlines(symbol, timeframe.id)
   const result = useMemo(() => (data ? computeTrend(data) : null), [data])
 
   return (
     <Card>
       <CardHeader
-        title={`${timeframe.label}봉 판단 근거`}
-        description="8개 지표를 −1(숏) ~ +1(롱)로 점수화한 뒤 가중합하여 확률로 변환합니다."
+        title={t('trend.breakdownTitle', { tf: t(`timeframe.${timeframe.id}`) })}
+        description={t('trend.breakdownDescription')}
         action={result && <BiasLabel bias={result.bias} className="text-sm" />}
       />
       {!result ? (
@@ -31,7 +33,7 @@ export function TrendBreakdown({ symbol, timeframe }: TrendBreakdownProps) {
             <FactorRow key={f.key} factor={f} />
           ))}
           <li className="flex items-center justify-between pt-4 text-sm">
-            <span className="text-body">가중 점수</span>
+            <span className="text-body">{t('trend.weightedScore')}</span>
             <span className={`font-mono font-medium ${result.score >= 0 ? 'text-up' : 'text-down'}`}>
               {result.score >= 0 ? '+' : ''}
               {result.score.toFixed(3)}
@@ -44,13 +46,14 @@ export function TrendBreakdown({ symbol, timeframe }: TrendBreakdownProps) {
 }
 
 function FactorRow({ factor }: { factor: TrendFactor }) {
+  const { t } = useTranslation()
   const pct = Math.abs(factor.value) * 50
   const positive = factor.value >= 0
   return (
     <li className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1.5 py-3 sm:grid-cols-[180px_1fr_56px]">
       <div>
-        <p className="text-sm font-semibold">{factor.name}</p>
-        <p className="text-xs text-muted">가중치 {Math.round(factor.weight * 100)}%</p>
+        <p className="text-sm font-semibold">{t(`trend.factors.${factor.key}`)}</p>
+        <p className="text-xs text-muted">{t('trend.weight', { pct: Math.round(factor.weight * 100) })}</p>
       </div>
       <span
         className={`text-right font-mono text-sm font-medium sm:order-last ${positive ? 'text-up' : 'text-down'}`}
@@ -66,7 +69,7 @@ function FactorRow({ factor }: { factor: TrendFactor }) {
             style={positive ? { left: '50%', width: `${pct}%` } : { right: '50%', width: `${pct}%` }}
           />
         </div>
-        <p className="mt-1.5 text-xs text-body">{factor.detail}</p>
+        <p className="mt-1.5 text-xs text-body">{t(`trend.detail.${factor.detail.key}`, factor.detail.values)}</p>
       </div>
     </li>
   )
