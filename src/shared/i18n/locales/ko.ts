@@ -13,6 +13,7 @@ export const ko = {
   language: {
     switchTo: 'English로 보기',
     short: 'EN',
+    label: '언어',
   },
   nav: {
     home: '{{name}} 홈',
@@ -21,6 +22,8 @@ export const ko = {
     terms: '이용약관',
     privacy: '개인정보처리방침',
     policy: '정책',
+    openMenu: '메뉴 열기',
+    closeMenu: '메뉴 닫기',
   },
   timeframe: {
     '5m': '5분',

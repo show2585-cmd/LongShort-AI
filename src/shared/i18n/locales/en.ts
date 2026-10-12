@@ -14,6 +14,7 @@ export const en: Messages = {
   language: {
     switchTo: '한국어로 보기',
     short: 'KO',
+    label: 'Language',
   },
   nav: {
     home: '{{name}} home',
@@ -22,6 +23,8 @@ export const en: Messages = {
     terms: 'Terms',
     privacy: 'Privacy Policy',
     policy: 'Policies',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
   },
   timeframe: {
     '5m': '5m',
