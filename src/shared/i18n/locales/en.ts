@@ -19,6 +19,7 @@ export const en: Messages = {
   nav: {
     home: '{{name}} home',
     analysis: 'Analysis',
+    guide: 'Guides',
     about: 'About',
     terms: 'Terms',
     privacy: 'Privacy Policy',
@@ -42,6 +43,9 @@ export const en: Messages = {
       'How the per-timeframe long/short trend probability is calculated, and where the long/short ratio and liquidation map data come from.',
     privacyTitle: 'Privacy Policy | {{site}}',
     privacyDescription: 'How {{site}} processes personal data, what is collected, and how cookies and ads are used.',
+    guideListTitle: 'Crypto Futures Analysis Guides · Long/Short Ratio · Liquidation Map · Indicators | {{site}}',
+    guideListDescription:
+      'Guides on reading the long/short ratio and liquidation maps, multi-timeframe analysis, open interest and funding, indicators such as EMA, MACD, RSI and ADX, and position sizing for crypto futures.',
     termsTitle: 'Terms of Service | {{site}}',
     termsDescription: 'Terms covering use of {{site}}, investment disclaimers and operating principles.',
   },
@@ -49,10 +53,24 @@ export const en: Messages = {
     aboutTitle: 'About {{name}}',
     privacyTitle: 'Privacy Policy',
     termsTitle: 'Terms of Service',
+    guideTitle: 'Crypto Futures Analysis Guides',
   },
   home: {
     hint: 'Tap a timeframe card to switch the chart, long/short ratios and signal breakdown to that timeframe.',
     headline: '{{name}} ({{base}}) long/short trend analysis · {{base}}/USDT perpetual',
+  },
+  guide: {
+    intro:
+      'What each number on {{name}} means and how to connect it to trading decisions — including how the indicators are calculated and where they fall short.',
+    readTime: '{{min}} min read',
+    updated: 'Updated {{date}}',
+    more: 'More guides',
+    all: 'All guides',
+    openTool: 'See it on the analysis page',
+    disclaimer:
+      'This article is a general explanation of technical analysis and market data and is not a recommendation to buy or sell any asset. All investment decisions and their consequences are your own.',
+    homeTitle: 'New here? Start with these guides',
+    homeIntro: 'How to read the numbers on this page and put them to use.',
   },
   notFound: {
     message: 'Page not found.',

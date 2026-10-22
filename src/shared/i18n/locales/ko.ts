@@ -18,6 +18,7 @@ export const ko = {
   nav: {
     home: '{{name}} 홈',
     analysis: '분석',
+    guide: '가이드',
     about: '서비스 소개',
     terms: '이용약관',
     privacy: '개인정보처리방침',
@@ -41,6 +42,9 @@ export const ko = {
       '타임프레임별 롱/숏 추세 확률을 어떤 지표로 계산하는지, 롱숏 비율과 청산맵 데이터는 어디서 오는지 설명합니다.',
     privacyTitle: '개인정보처리방침 | {{site}}',
     privacyDescription: '{{site}} 의 개인정보 처리 목적, 수집 항목, 쿠키 및 광고 관련 안내입니다.',
+    guideListTitle: '코인 선물 분석 가이드 · 롱숏 비율 · 청산맵 · 보조지표 | {{site}}',
+    guideListDescription:
+      '롱숏 비율과 청산맵 읽는 법, 멀티 타임프레임 분석, 미결제약정과 펀딩비, EMA · MACD · RSI · ADX 같은 보조지표, 포지션 크기 계산까지 코인 선물 분석에 필요한 내용을 정리한 가이드입니다.',
     termsTitle: '이용약관 | {{site}}',
     termsDescription: '{{site}} 서비스 이용 조건, 투자 관련 면책, 운영 원칙에 대한 약관입니다.',
   },
@@ -48,10 +52,24 @@ export const ko = {
     aboutTitle: '{{name}} 소개',
     privacyTitle: '개인정보처리방침',
     termsTitle: '이용약관',
+    guideTitle: '코인 선물 분석 가이드',
   },
   home: {
     hint: '타임프레임 카드를 누르면 차트와 롱/숏 비율, 판단 근거가 해당 기준으로 바뀝니다.',
     headline: '{{name}}({{base}}) 롱숏 추세 분석 · {{base}}/USDT 무기한',
+  },
+  guide: {
+    intro:
+      '{{name}} 화면의 각 숫자가 무엇을 뜻하는지, 그리고 그 숫자를 매매 판단에 어떻게 연결하는지 정리한 글입니다. 지표의 계산 원리와 한계를 함께 다룹니다.',
+    readTime: '{{min}}분 분량',
+    updated: '업데이트 {{date}}',
+    more: '다른 가이드',
+    all: '전체 가이드',
+    openTool: '분석 화면에서 직접 확인하기',
+    disclaimer:
+      '이 글은 기술적 분석과 시장 데이터에 대한 일반적인 설명이며 특정 종목의 매수·매도를 권유하지 않습니다. 모든 투자 판단과 책임은 본인에게 있습니다.',
+    homeTitle: '처음이라면 이 가이드부터',
+    homeIntro: '화면의 숫자를 어떻게 읽고 활용하는지 정리했습니다.',
   },
   notFound: {
     message: '페이지를 찾을 수 없습니다.',

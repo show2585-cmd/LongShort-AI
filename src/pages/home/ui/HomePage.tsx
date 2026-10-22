@@ -1,8 +1,12 @@
 import { useState } from 'react'
+import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+import { GUIDES } from '@/entities/guide'
 import { SYMBOLS, TIMEFRAMES, useTicker24h, type MarketSymbol, type Timeframe } from '@/entities/market'
 import { SymbolSelector } from '@/features/select-symbol'
 import { AD_SLOTS, APP_NAME } from '@/shared/config'
+import { useLocale } from '@/shared/i18n'
 import { cn, formatPercent, formatPrice, usePageMeta } from '@/shared/lib'
 import { AdSlot, Skeleton } from '@/shared/ui'
 import { LiquidationMap } from '@/widgets/liquidation-map'
@@ -56,7 +60,39 @@ export function HomePage() {
           </aside>
         </div>
       </section>
+
+      <GuideHighlights />
     </>
+  )
+}
+
+// 도구 화면만으로는 설명이 부족하므로, 숫자 읽는 법을 다룬 가이드로 연결
+function GuideHighlights() {
+  const { t } = useTranslation()
+  const locale = useLocale()
+  return (
+    <section className="mx-auto max-w-[1200px] px-4 py-12 lg:px-6 lg:py-16">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">{t('guide.homeTitle')}</h2>
+          <p className="mt-1 text-sm text-body">{t('guide.homeIntro')}</p>
+        </div>
+        <Link to="/guide" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+          {t('guide.all')}
+          <ChevronRight className="size-4" />
+        </Link>
+      </div>
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {GUIDES.slice(0, 4).map((g) => (
+          <li key={g.slug}>
+            <Link to={`/guide/${g.slug}`} className="block h-full rounded-xl border border-hairline p-5 hover:border-primary">
+              <h3 className="leading-snug font-semibold text-ink">{g[locale].title}</h3>
+              <p className="mt-2 line-clamp-3 text-[13px] leading-relaxed text-body">{g[locale].description}</p>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 

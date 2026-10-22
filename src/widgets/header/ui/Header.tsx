@@ -10,6 +10,7 @@ import { Badge, Logo } from '@/shared/ui'
 
 const NAV = [
   { to: '/', label: 'nav.analysis', end: true },
+  { to: '/guide', label: 'nav.guide', end: false },
   { to: '/about', label: 'nav.about', end: false },
 ] as const
 
@@ -53,7 +54,7 @@ export function Header() {
           <div className="flex items-center gap-1">
             <LanguageSwitcher className="hidden sm:inline-flex" />
             <SupportButton />
-            {/* 모바일: 분석 · 서비스 소개 · 언어 설정은 햄버거 메뉴 안에서 */}
+            {/* 모바일: 분석 · 가이드 · 서비스 소개 · 언어 설정은 햄버거 메뉴 안에서 */}
             <button
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}

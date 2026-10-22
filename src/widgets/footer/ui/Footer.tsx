@@ -6,6 +6,7 @@ import { APP_NAME, CONTACT_EMAIL } from '@/shared/config'
 import { Logo } from '@/shared/ui'
 
 const LINKS = [
+  { to: '/guide', label: 'nav.guide' },
   { to: '/about', label: 'nav.about' },
   { to: '/terms', label: 'nav.terms' },
   { to: '/privacy', label: 'nav.privacy', strong: true },

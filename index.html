@@ -59,7 +59,9 @@
   </head>
   <body>
     <div id="root">
-      <!-- JS 를 실행하지 않는 크롤러(네이버 등)용 정적 콘텐츠. React 가 마운트되면 대체된다. -->
+      <!-- JS 를 실행하지 않는 크롤러(네이버 등)용 정적 콘텐츠. React 가 마운트되면 대체된다.
+           static:start ~ static:end 사이는 빌드 시 vite-plugin-seo.ts 가 경로별 본문으로 바꿔 /guide 등 정적 HTML 을 만든다. -->
+      <!--static:start-->
       <main style="max-width: 720px; margin: 0 auto; padding: 48px 16px; font-family: system-ui, sans-serif; line-height: 1.6; color: #0a0b0d">
         <h1>LongShort AI - 코인 롱/숏 추세 확률 분석</h1>
         <p>
@@ -76,11 +78,14 @@
         </ul>
         <p>LongShort AI 는 거래소 레퍼럴(추천인) 코드, 유료 멤버십, 리딩방을 운영하지 않습니다.</p>
         <p><small>제공 정보는 투자 권유가 아니며 모든 투자 판단과 책임은 본인에게 있습니다.</small></p>
+        <h2>코인 선물 분석 가이드</h2>
+        __SEO_GUIDE_LINKS__
         <nav>
-          <a href="/about">서비스 소개 · 분석 방법</a> · <a href="/terms">이용약관</a> ·
+          <a href="/guide">가이드</a> · <a href="/about">서비스 소개 · 분석 방법</a> · <a href="/terms">이용약관</a> ·
           <a href="/privacy">개인정보처리방침</a>
         </nav>
       </main>
+      <!--static:end-->
     </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
