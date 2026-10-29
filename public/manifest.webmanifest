@@ -1,7 +1,7 @@
 {
-  "name": "LongShort AI - 코인 롱숏 추세 확률",
+  "name": "LongShort AI - 코인 · 한국 주식 롱숏 추세 확률",
   "short_name": "LongShort AI",
-  "description": "코인 선물 타임프레임별 롱/숏 추세 확률, 롱숏 비율, 청산맵",
+  "description": "코인 · SK하이닉스 · 삼성전자 선물 타임프레임별 롱/숏 추세 확률, 롱숏 비율, 청산맵",
   "lang": "ko",
   "start_url": "/",
   "display": "standalone",

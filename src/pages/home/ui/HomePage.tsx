@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { GUIDES } from '@/entities/guide'
-import { SYMBOLS, TIMEFRAMES, useTicker24h, type MarketSymbol, type Timeframe } from '@/entities/market'
+import { DEFAULT_SYMBOL, TIMEFRAMES, useTicker24h, type MarketSymbol, type Timeframe } from '@/entities/market'
 import { SymbolSelector } from '@/features/select-symbol'
 import { AD_SLOTS, APP_NAME } from '@/shared/config'
 import { useLocale } from '@/shared/i18n'
@@ -16,13 +16,14 @@ import { TrendBreakdown, TrendOverview } from '@/widgets/trend-overview'
 
 export function HomePage() {
   const { t } = useTranslation()
-  const [symbol, setSymbol] = useState<MarketSymbol>(SYMBOLS[0])
+  const [symbol, setSymbol] = useState<MarketSymbol>(DEFAULT_SYMBOL)
   const [tfId, setTfId] = useState<Timeframe['id']>('1h')
   const timeframe = TIMEFRAMES.find((t) => t.id === tfId)!
+  const name = useSymbolName(symbol)
 
   // 선택한 코인에 맞춰 탭 제목 갱신 (공유·북마크·검색 결과 표시용)
   usePageMeta({
-    title: t('meta.homeTitle', { name: symbol.name, base: symbol.base, site: APP_NAME }),
+    title: t('meta.homeTitle', { name, base: symbol.base, site: APP_NAME }),
     description: t('meta.homeDescription'),
     path: '/',
   })
@@ -96,15 +97,21 @@ function GuideHighlights() {
   )
 }
 
+function useSymbolName(symbol: MarketSymbol) {
+  const locale = useLocale()
+  return locale === 'ko' ? (symbol.nameKo ?? symbol.name) : symbol.name
+}
+
 function PriceHeadline({ symbol }: { symbol: MarketSymbol }) {
   const { t } = useTranslation()
+  const name = useSymbolName(symbol)
   const { data } = useTicker24h(symbol.id)
   const up = (data?.priceChangePercent ?? 0) >= 0
 
   return (
     <div className="mt-8">
       <h1 className="text-sm font-normal text-on-dark-soft">
-        {t('home.headline', { name: symbol.name, base: symbol.base })}
+        {t('home.headline', { name, base: symbol.base })}
       </h1>
       {data ? (
         <div className="mt-2 flex flex-wrap items-baseline gap-x-4 gap-y-1">

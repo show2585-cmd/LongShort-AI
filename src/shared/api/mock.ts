@@ -8,6 +8,10 @@ const BASE_PRICE: Record<string, number> = {
   XRPUSDT: 2.5,
   DOGEUSDT: 0.2,
   BNBUSDT: 650,
+  KORUUSDT: 30,
+  SKHYNIXUSDT: 420,
+  SAMSUNGUSDT: 65,
+  HYUNDAIUSDT: 180,
 }
 
 const INTERVAL_MS: Record<BinanceInterval, number> = {

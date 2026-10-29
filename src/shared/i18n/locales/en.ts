@@ -37,7 +37,7 @@ export const en: Messages = {
   meta: {
     homeTitle: '{{name}} ({{base}}) Long/Short Trend Probability · Long/Short Ratio · Liquidation Map | {{site}}',
     homeDescription:
-      'A free analysis tool that shows long/short trend probabilities for crypto futures such as Bitcoin and Ethereum on the 5m, 15m, 1H, 4H and 1D timeframes, together with live Binance long/short ratios and a liquidation map. No referral codes or paid memberships.',
+      'A free analysis tool that shows long/short trend probabilities for Binance perpetual futures — SK hynix, Samsung Electronics, Hyundai Motor, KOSPI (KORU) and crypto such as Bitcoin and Ethereum — on the 5m, 15m, 1H, 4H and 1D timeframes, together with live long/short ratios and a liquidation map. No referral codes or paid memberships.',
     aboutTitle: 'About · Methodology | {{site}}',
     aboutDescription:
       'How the per-timeframe long/short trend probability is calculated, and where the long/short ratio and liquidation map data come from.',
