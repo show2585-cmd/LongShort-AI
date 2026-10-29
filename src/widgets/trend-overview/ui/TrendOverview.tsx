@@ -1,4 +1,4 @@
-import { AlertCircle, LineChart } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
 import { TIMEFRAMES, type Timeframe } from '@/entities/market'
 import { BIAS_TONE, BiasLabel, ProbabilityBar } from '@/entities/trend'
@@ -12,120 +12,146 @@ interface TrendOverviewProps {
   onSelect: (tf: Timeframe['id']) => void
 }
 
+// 왼쪽: 종합 판단(화면의 결론), 오른쪽: 타임프레임별 행 목록(짧은 봉 → 긴 봉 순서로 비교)
 export function TrendOverview({ symbol, selected, onSelect }: TrendOverviewProps) {
-  const { t } = useTranslation()
   const { trends, consensus } = useTrends(symbol)
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-sm text-on-dark-soft">{t('trend.consensus')}</p>
-          {consensus ? (
-            <p
-              className={cn(
-                'mt-3 inline-flex flex-wrap items-baseline gap-x-2 rounded-xl border-2 bg-linear-to-br to-transparent px-5 py-3 text-[40px] leading-none font-normal tracking-tight sm:text-[52px]',
-                BIAS_TONE[consensus.bias].border,
-                BIAS_TONE[consensus.bias].tint,
-              )}
-            >
-              <span className={consensus.bias === 'neutral' ? 'text-on-dark' : BIAS_TONE[consensus.bias].text}>
-                {consensus.bias === 'neutral' ? t('bias.neutral') : t(`common.${consensus.bias}`)}
-              </span>
-              {consensus.bias === 'neutral' ? (
-                <span className="text-base text-on-dark-soft">
-                  {t('trend.weakDirection')} · {consensus.probLong >= 50 ? t('common.long') : t('common.short')}{' '}
-                  <span className="font-mono">{Math.max(consensus.probLong, 100 - consensus.probLong)}%</span>
-                </span>
-              ) : (
-                <span className="font-mono text-[32px] sm:text-[40px]">
-                  {Math.max(consensus.probLong, 100 - consensus.probLong)}%
-                </span>
-              )}
-            </p>
-          ) : (
-            <Skeleton className="mt-2 h-12 w-56 bg-surface-dark-elevated" />
-          )}
-        </div>
-        {consensus && (
-          <p className="text-sm text-on-dark-soft">
-            <Trans
-              i18nKey="trend.agree"
-              values={{ count: consensus.agree, total: TIMEFRAMES.length }}
-              components={[<span className="font-mono text-on-dark" />]}
-            />
-          </p>
-        )}
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-        {trends.map((t) => (
-          <TrendCard
-            key={t.timeframe.id}
-            trend={t}
-            active={t.timeframe.id === selected}
-            onClick={() => onSelect(t.timeframe.id)}
-          />
-        ))}
-      </div>
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+      <Consensus consensus={consensus} />
+      <TimeframeTable trends={trends} selected={selected} onSelect={onSelect} />
     </div>
   )
 }
 
-function TrendCard({ trend, active, onClick }: { trend: TimeframeTrend; active: boolean; onClick: () => void }) {
+type ConsensusData = ReturnType<typeof useTrends>['consensus']
+
+function Consensus({ consensus }: { consensus: ConsensusData }) {
+  const { t } = useTranslation()
+
+  if (!consensus) {
+    return (
+      <div className="rounded-xl border border-white/10 bg-surface-dark-elevated p-6">
+        <Skeleton className="h-4 w-24 bg-white/10" />
+        <Skeleton className="mt-4 h-14 w-48 bg-white/10" />
+        <Skeleton className="mt-6 h-2 w-full bg-white/10" />
+      </div>
+    )
+  }
+
+  const { bias, probLong } = consensus
+  const tone = BIAS_TONE[bias]
+  const prob = Math.max(probLong, 100 - probLong)
+  const neutral = bias === 'neutral'
+
+  return (
+    <section
+      aria-label={t('trend.consensus')}
+      className={cn('flex flex-col rounded-xl border-2 bg-linear-to-br to-transparent p-6', tone.border, tone.tint)}
+    >
+      <h2 className="text-sm text-on-dark-soft">{t('trend.consensus')}</h2>
+      <p className="mt-3 flex flex-wrap items-baseline gap-x-3 leading-none">
+        <span className={cn('text-[44px] font-normal tracking-tight sm:text-[56px]', neutral ? 'text-on-dark' : tone.text)}>
+          {neutral ? t('bias.neutral') : t(`common.${bias}`)}
+        </span>
+        <span className="font-mono text-[36px] font-medium text-on-dark sm:text-[44px]">{prob}%</span>
+      </p>
+      {neutral && (
+        <p className="mt-2 text-sm text-on-dark-soft">
+          {t('trend.weakDirection')}: {probLong >= 50 ? t('common.long') : t('common.short')} {prob}%
+        </p>
+      )}
+      <ProbabilityBar long={probLong} tone="dark" className="mt-6" />
+      <p className="mt-auto pt-6 text-sm text-on-dark-soft">
+        <Trans
+          i18nKey="trend.agree"
+          values={{ count: consensus.agree, total: TIMEFRAMES.length }}
+          components={[<span className="font-mono text-on-dark" />]}
+        />
+      </p>
+    </section>
+  )
+}
+
+interface TimeframeTableProps {
+  trends: TimeframeTrend[]
+  selected: Timeframe['id']
+  onSelect: (tf: Timeframe['id']) => void
+}
+
+function TimeframeTable({ trends, selected, onSelect }: TimeframeTableProps) {
+  const { t } = useTranslation()
+  return (
+    <section aria-label={t('trend.tableTitle')} className="rounded-xl border border-white/10 bg-surface-dark-elevated p-2 sm:p-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-3 pt-2 pb-3">
+        <h2 className="text-sm font-semibold text-on-dark">{t('trend.tableTitle')}</h2>
+        <p className="text-xs text-on-dark-soft">{t('trend.tableHint')}</p>
+      </div>
+      <ul className="space-y-1">
+        {trends.map((trend) => (
+          <li key={trend.timeframe.id}>
+            <TimeframeRow
+              trend={trend}
+              active={trend.timeframe.id === selected}
+              onClick={() => onSelect(trend.timeframe.id)}
+            />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function TimeframeRow({ trend, active, onClick }: { trend: TimeframeTrend; active: boolean; onClick: () => void }) {
   const { t } = useTranslation()
   const { timeframe, result, isLoading, isError } = trend
-  const label = t(`timeframe.${timeframe.id}`)
-  const tone = result ? BIAS_TONE[result.bias] : null
 
   return (
     <button
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'cursor-pointer rounded-xl border-2 bg-surface-dark-elevated bg-linear-to-b to-transparent p-5 text-left transition-[box-shadow,border-color,translate] duration-200 last:col-span-2 md:last:col-span-1',
-        tone ? [tone.border, tone.tint] : 'border-white/10',
-        active
-          ? '-translate-y-1 shadow-[0_12px_32px_rgba(0,82,255,0.35)] ring-2 ring-primary ring-offset-2 ring-offset-surface-dark'
-          : 'hover:ring-1 hover:ring-white/20 hover:ring-offset-2 hover:ring-offset-surface-dark',
+        'grid w-full cursor-pointer grid-cols-[56px_1fr_auto] items-center gap-x-3 gap-y-2 rounded-lg px-3 py-3 text-left transition-colors sm:grid-cols-[64px_128px_64px_1fr_88px]',
+        active ? 'bg-canvas text-ink' : 'text-on-dark hover:bg-white/[0.06]',
       )}
     >
-      <div className="flex items-center justify-between">
-        {active ? (
-          <span className="inline-flex items-center gap-1 rounded-pill bg-primary px-2.5 py-0.5 text-sm font-semibold text-white">
-            <LineChart className="size-3.5" strokeWidth={2.5} />
-            {label}
-          </span>
-        ) : (
-          <span className="py-0.5 text-sm font-semibold text-on-dark">{label}</span>
-        )}
-        {result?.ranging && (
-          <span className="rounded-pill bg-white/10 px-2 py-0.5 text-[11px] text-on-dark-soft">{t('trend.ranging')}</span>
-        )}
-      </div>
+      <span className="text-sm font-semibold">{t(`timeframe.${timeframe.id}`)}</span>
 
       {isError ? (
-        <p className="mt-6 flex items-center gap-1.5 text-sm text-on-dark-soft">
+        <span className={cn('col-span-2 flex items-center gap-1.5 text-sm sm:col-span-3', active ? 'text-body' : 'text-on-dark-soft')}>
           <AlertCircle className="size-4" /> {t('common.loadError')}
-        </p>
+        </span>
       ) : isLoading || !result ? (
-        <div className="mt-4 space-y-3">
-          <Skeleton className="h-8 w-20 bg-white/10" />
-          <Skeleton className="h-2 w-full bg-white/10" />
-        </div>
+        <Skeleton className={cn('col-span-2 h-6 sm:col-span-4', active ? 'bg-surface-strong' : 'bg-white/10')} />
       ) : (
         <>
-          <BiasLabel bias={result.bias} className="mt-3 text-sm" />
-          <p className="mt-1 flex items-baseline gap-1.5 text-on-dark">
-            <span className="font-mono text-[28px] leading-tight font-medium">
-              {Math.max(result.probLong, result.probShort)}%
-            </span>
-            <span className="text-xs text-on-dark-soft">{result.probLong >= result.probShort ? t('trend.longProb') : t('trend.shortProb')}</span>
-          </p>
-          <ProbabilityBar long={result.probLong} tone="dark" className="mt-3" />
-          <p className="mt-3 font-mono text-[11px] text-on-dark-soft">ADX {result.adx.toFixed(1)}</p>
+          <span className="flex min-w-0 items-center gap-1.5">
+            <BiasLabel bias={result.bias} tone={active ? 'light' : 'dark'} className="text-xs whitespace-nowrap" />
+            {/* 모바일은 ADX 열이 없으므로 횡보 표시를 라벨 옆에 */}
+            {result.ranging && (
+              <span className={cn('text-xs sm:hidden', active ? 'text-body' : 'text-on-dark-soft')}>{t('trend.ranging')}</span>
+            )}
+          </span>
+          <span className="text-right font-mono text-lg font-medium sm:text-left">
+            {Math.max(result.probLong, result.probShort)}%
+          </span>
+          <ProbabilityTrack long={result.probLong} active={active} />
+          <span className={cn('hidden text-right text-xs leading-tight sm:block', active ? 'text-body' : 'text-on-dark-soft')}>
+            <span className="font-mono">ADX {result.adx.toFixed(1)}</span>
+            {result.ranging && <span className="block">{t('trend.ranging')}</span>}
+          </span>
         </>
       )}
     </button>
+  )
+}
+
+// 행 안에서는 라벨 없이 막대만 (숫자는 왼쪽 % 와 라벨이 이미 보여줌)
+function ProbabilityTrack({ long, active }: { long: number; active: boolean }) {
+  return (
+    <span className="col-span-3 flex h-2 gap-0.5 overflow-hidden rounded-pill sm:col-span-1" aria-hidden>
+      <span className="bg-up" style={{ width: `${long}%` }} />
+      <span className={active ? 'bg-down' : 'bg-down-on-dark'} style={{ width: `${100 - long}%` }} />
+    </span>
   )
 }

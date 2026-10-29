@@ -23,6 +23,8 @@
   --color-on-dark-soft: #a8acb3;
   --color-up: #05b169;
   --color-down: #cf202f;
+  /* 다크 배경 전용: #cf202f 는 다크 위 대비 3.5:1 이라 작은 글씨가 흐려짐 → 6.5:1 */
+  --color-down-on-dark: #ff5f6d;
   --color-accent-yellow: #f4b000;
 
   --font-sans: 'Inter', 'Pretendard Variable', Pretendard, -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -42,5 +44,25 @@
   body {
     @apply bg-canvas font-sans text-ink antialiased;
     word-break: keep-all;
+  }
+
+  /* 키보드로 이동할 때만 포커스 링 표시 (마우스 클릭에는 표시 안 함) */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  /* 다크 히어로 위에서는 파란 링 대비가 3:1 미만이라 흰색 */
+  .bg-surface-dark :focus-visible {
+    outline-color: var(--color-on-dark);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

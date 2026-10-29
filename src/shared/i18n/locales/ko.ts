@@ -54,9 +54,15 @@ export const ko = {
     termsTitle: '이용약관',
     guideTitle: '코인 선물 분석 가이드',
   },
+  market: {
+    krStock: '한국 주식',
+    crypto: '코인',
+  },
   home: {
-    hint: '타임프레임 카드를 누르면 차트와 롱/숏 비율, 판단 근거가 해당 기준으로 바뀝니다.',
+    change24h: '24시간',
     headline: '{{name}}({{base}}) 롱숏 추세 분석 · {{base}}/USDT 무기한',
+    koruNote:
+      '코스피 지수를 직접 따르는 선물이 없어, 코스피 3배 레버리지 ETF(KORU) 무기한 선물 데이터를 보여줍니다. 등락률은 지수의 약 3배로 움직입니다.',
   },
   guide: {
     intro:
@@ -91,6 +97,8 @@ export const ko = {
     weakDirection: '방향성 약함',
     agree: '{{total}}개 타임프레임 중 <0>{{count}}</0>개가 같은 방향 · 상위 타임프레임 가중',
     ranging: '횡보',
+    tableTitle: '타임프레임별 추세',
+    tableHint: '행을 누르면 아래 차트와 판단 근거가 그 기준으로 바뀝니다',
     longProb: '롱 확률',
     shortProb: '숏 확률',
     breakdownTitle: '{{tf}}봉 판단 근거',
@@ -131,6 +139,36 @@ export const ko = {
     globalAccount: { title: '전체 계정', hint: '롱/숏 포지션 보유 계정 수 비율' },
     topPosition: { title: '상위 트레이더 포지션', hint: '증거금 상위 20% 계정의 포지션 규모 비율' },
     taker: { title: '테이커 매수/매도', hint: '시장가 매수 vs 매도 체결량' },
+  },
+  fundingOi: {
+    title: '펀딩비 · 미결제약정',
+    description: 'Binance USDT-M 선물 · 실시간 펀딩비와 최근 24시간 미결제약정 변화',
+    funding: {
+      title: '펀딩비',
+      hint: '{{hours}}시간마다 정산 · 양수면 롱이 숏에게 지불',
+      annual: '연환산',
+      next: '다음 정산까지',
+      state: {
+        longHot: '롱 과열: 롱을 유지하는 비용이 큽니다',
+        neutral: '중립: 기본 금리 수준입니다',
+        shortLean: '숏 우세: 숏이 롱에게 지불합니다',
+        shortHot: '숏 과열: 숏 스퀴즈에 주의하세요',
+      },
+    },
+    oi: {
+      title: '미결제약정 (24시간)',
+      hint: '아직 청산되지 않은 계약 규모 · 가격 방향과 함께 해석',
+      oiChange: '미결제약정 증감',
+      priceChange: '가격 변화',
+      notEnough: '24시간 변화를 계산할 데이터가 아직 부족합니다.',
+      flow: {
+        newLong: { title: '신규 롱 유입', hint: '가격과 미결제약정이 함께 상승' },
+        shortCover: { title: '숏 청산 주도', hint: '가격은 오르지만 포지션은 줄어듦' },
+        newShort: { title: '신규 숏 유입', hint: '가격은 내리고 미결제약정은 증가' },
+        longExit: { title: '롱 청산 주도', hint: '가격과 미결제약정이 함께 감소' },
+      },
+    },
+    note: '펀딩비가 크게 치우치거나 가격과 미결제약정이 함께 급증하면 반대 방향 청산이 연쇄로 나올 수 있습니다. 판단 보조용 지표입니다.',
   },
   liquidation: {
     title: '청산 맵 (추정)',

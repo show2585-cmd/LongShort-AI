@@ -12,23 +12,27 @@ export function ProbabilityBar({ long, className, labels, tone = 'light' }: Prob
   const { t } = useTranslation()
   const [longLabel, shortLabel] = labels ?? [t('common.long'), t('common.short')]
   const short = 100 - long
+  const dark = tone === 'dark'
   return (
     <div className={className}>
       <div className="flex h-2 gap-0.5 overflow-hidden rounded-pill">
         <div className="bg-up transition-[width] duration-500" style={{ width: `${long}%` }} />
-        <div className="bg-down transition-[width] duration-500" style={{ width: `${short}%` }} />
+        <div
+          className={cn('transition-[width] duration-500', dark ? 'bg-down-on-dark' : 'bg-down')}
+          style={{ width: `${short}%` }}
+        />
       </div>
       <div
         className={cn(
           'mt-2 flex justify-between font-mono text-xs',
-          tone === 'dark' ? 'text-on-dark-soft' : 'text-muted',
+          dark ? 'text-on-dark-soft' : 'text-muted',
         )}
       >
         <span>
           {longLabel} <span className="text-up">{long.toFixed(1).replace(/\.0$/, '')}%</span>
         </span>
         <span>
-          <span className="text-down">{short.toFixed(1).replace(/\.0$/, '')}%</span> {shortLabel}
+          <span className={dark ? 'text-down-on-dark' : 'text-down'}>{short.toFixed(1).replace(/\.0$/, '')}%</span> {shortLabel}
         </span>
       </div>
     </div>

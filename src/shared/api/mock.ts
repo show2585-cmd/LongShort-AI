@@ -1,5 +1,14 @@
 // 개발/데모용 합성 데이터. VITE_USE_MOCK=true 일 때만 사용됩니다.
-import type { BinanceInterval, Kline, OpenInterestPoint, RatioKind, RatioPoint, Ticker24h } from './binance'
+import type {
+  BinanceInterval,
+  FundingPoint,
+  Kline,
+  OpenInterestPoint,
+  PremiumIndex,
+  RatioKind,
+  RatioPoint,
+  Ticker24h,
+} from './binance'
 
 const BASE_PRICE: Record<string, number> = {
   BTCUSDT: 100000,
@@ -72,6 +81,29 @@ export function ticker(symbol: string): Ticker24h {
     highPrice: Math.max(...ks.map((k) => k.high)),
     lowPrice: Math.min(...ks.map((k) => k.low)),
     quoteVolume: ks.reduce((s, k) => s + k.volume * k.close, 0),
+  }
+}
+
+const FUNDING_MS = 8 * 3_600_000
+
+export function fundingHistory(symbol: string, limit: number): FundingPoint[] {
+  const r = rng(hash('funding' + symbol))
+  const end = Math.floor(Date.now() / FUNDING_MS) * FUNDING_MS
+  let rate = 0.0001
+  return Array.from({ length: limit }, (_, i) => {
+    rate = Math.min(0.0015, Math.max(-0.001, rate + (r() - 0.48) * 0.0001))
+    return { fundingTime: end - (limit - 1 - i) * FUNDING_MS, fundingRate: rate }
+  })
+}
+
+export function premiumIndex(symbol: string): PremiumIndex {
+  const last = fundingHistory(symbol, 30).at(-1)!
+  const { lastPrice } = ticker(symbol)
+  return {
+    markPrice: lastPrice,
+    indexPrice: lastPrice * 0.9998,
+    fundingRate: last.fundingRate * 1.1,
+    nextFundingTime: last.fundingTime + FUNDING_MS,
   }
 }
 

@@ -35,6 +35,18 @@ export interface OpenInterestPoint {
   openInterestValue: number // USDT
 }
 
+export interface PremiumIndex {
+  markPrice: number
+  indexPrice: number
+  fundingRate: number // 다음 정산 예정 펀딩비 (0.0001 = 0.01%)
+  nextFundingTime: number
+}
+
+export interface FundingPoint {
+  fundingTime: number
+  fundingRate: number
+}
+
 export type RatioKind = 'globalAccount' | 'topPosition' | 'taker'
 
 type RawKline = [number, string, string, string, string, string, number, string, number, string, string, string]
@@ -70,6 +82,27 @@ export async function fetchTicker24h(symbol: string): Promise<Ticker24h> {
     lowPrice: +t.lowPrice,
     quoteVolume: +t.quoteVolume,
   }
+}
+
+export async function fetchPremiumIndex(symbol: string): Promise<PremiumIndex> {
+  if (USE_MOCK) return mock.premiumIndex(symbol)
+  const p = await getJson<Record<string, string | number>>(`${BINANCE_FAPI_URL}/fapi/v1/premiumIndex`, { symbol })
+  return {
+    markPrice: +p.markPrice,
+    indexPrice: +p.indexPrice,
+    fundingRate: +p.lastFundingRate,
+    nextFundingTime: +p.nextFundingTime,
+  }
+}
+
+// 정산된 펀딩비 이력 (종목마다 정산 주기가 1h/4h/8h 로 다를 수 있음)
+export async function fetchFundingHistory(symbol: string, limit = 30): Promise<FundingPoint[]> {
+  if (USE_MOCK) return mock.fundingHistory(symbol, limit)
+  const raw = await getJson<{ fundingTime: number; fundingRate: string }[]>(`${BINANCE_FAPI_URL}/fapi/v1/fundingRate`, {
+    symbol,
+    limit,
+  })
+  return raw.map((r) => ({ fundingTime: r.fundingTime, fundingRate: +r.fundingRate })).sort((a, b) => a.fundingTime - b.fundingTime)
 }
 
 // 롱/숏 비율 (Binance 는 최근 30일, 5m~1d 주기만 제공)

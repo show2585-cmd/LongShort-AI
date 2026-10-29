@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import {
+  fetchFundingHistory,
   fetchKlines,
   fetchLongShortRatio,
   fetchOpenInterestHist,
+  fetchPremiumIndex,
   fetchTicker24h,
   type BinanceInterval,
   type RatioKind,
@@ -24,6 +26,23 @@ export function useTicker24h(symbol: string) {
     queryKey: ['ticker24h', symbol],
     queryFn: () => fetchTicker24h(symbol),
     refetchInterval: 15_000,
+  })
+}
+
+export function usePremiumIndex(symbol: string) {
+  return useQuery({
+    queryKey: ['premiumIndex', symbol],
+    queryFn: () => fetchPremiumIndex(symbol),
+    refetchInterval: 30_000,
+  })
+}
+
+// 정산은 최소 1시간 주기라 자주 갱신할 필요 없음
+export function useFundingHistory(symbol: string, limit = 30) {
+  return useQuery({
+    queryKey: ['fundingHistory', symbol, limit],
+    queryFn: () => fetchFundingHistory(symbol, limit),
+    refetchInterval: 300_000,
   })
 }
 

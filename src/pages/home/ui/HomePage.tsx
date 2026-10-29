@@ -3,12 +3,20 @@ import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { GUIDES } from '@/entities/guide'
-import { DEFAULT_SYMBOL, TIMEFRAMES, useTicker24h, type MarketSymbol, type Timeframe } from '@/entities/market'
+import {
+  DEFAULT_SYMBOL,
+  TIMEFRAMES,
+  useSymbolName,
+  useTicker24h,
+  type MarketSymbol,
+  type Timeframe,
+} from '@/entities/market'
 import { SymbolSelector } from '@/features/select-symbol'
 import { AD_SLOTS, APP_NAME } from '@/shared/config'
 import { useLocale } from '@/shared/i18n'
 import { cn, formatPercent, formatPrice, usePageMeta } from '@/shared/lib'
 import { AdSlot, Skeleton } from '@/shared/ui'
+import { FundingOi } from '@/widgets/funding-oi'
 import { LiquidationMap } from '@/widgets/liquidation-map'
 import { LongShortRatio } from '@/widgets/long-short-ratio'
 import { TradingViewChart } from '@/widgets/tradingview-chart'
@@ -32,16 +40,9 @@ export function HomePage() {
     <>
       {/* 다크 히어로: 종목 선택 + 타임프레임별 추세 */}
       <section className="bg-surface-dark text-on-dark">
-        <div className="mx-auto max-w-[1200px] space-y-10 px-4 py-12 lg:px-6 lg:py-16">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <SymbolSelector value={symbol} onChange={setSymbol} />
-              <PriceHeadline symbol={symbol} />
-            </div>
-            <p className="max-w-sm text-sm leading-relaxed text-on-dark-soft">
-              {t('home.hint')}
-            </p>
-          </div>
+        <div className="mx-auto max-w-[1200px] px-4 py-10 lg:px-6 lg:py-14">
+          <SymbolSelector value={symbol} onChange={setSymbol} />
+          <PriceHeadline symbol={symbol} />
           <TrendOverview symbol={symbol.id} selected={tfId} onSelect={setTfId} />
         </div>
       </section>
@@ -56,6 +57,7 @@ export function HomePage() {
           </div>
           <aside className="space-y-6">
             <LongShortRatio symbol={symbol.id} timeframe={timeframe} />
+            <FundingOi symbol={symbol.id} />
             <LiquidationMap symbol={symbol.id} />
             <AdSlot slot={AD_SLOTS.sidebar} />
           </aside>
@@ -97,34 +99,33 @@ function GuideHighlights() {
   )
 }
 
-function useSymbolName(symbol: MarketSymbol) {
-  const locale = useLocale()
-  return locale === 'ko' ? (symbol.nameKo ?? symbol.name) : symbol.name
-}
-
 function PriceHeadline({ symbol }: { symbol: MarketSymbol }) {
   const { t } = useTranslation()
   const name = useSymbolName(symbol)
   const { data } = useTicker24h(symbol.id)
   const up = (data?.priceChangePercent ?? 0) >= 0
 
+  // 가격은 맥락 정보 → 종합 판단보다 작게 (화면의 결론은 아래 종합 판단)
   return (
-    <div className="mt-8">
+    <div className="mt-6 mb-6">
       <h1 className="text-sm font-normal text-on-dark-soft">
         {t('home.headline', { name, base: symbol.base })}
       </h1>
       {data ? (
-        <div className="mt-2 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span className="font-mono text-[44px] leading-none font-medium tracking-tight sm:text-[56px]">
+        <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span className="font-mono text-[32px] leading-none font-medium tracking-tight sm:text-[40px]">
             {formatPrice(data.lastPrice)}
           </span>
-          <span className={cn('font-mono text-lg font-medium', up ? 'text-up' : 'text-down')}>
+          <span className={cn('font-mono text-base font-medium', up ? 'text-up' : 'text-down-on-dark')}>
             {formatPercent(data.priceChangePercent, 2, true)}
           </span>
+          <span className="text-xs text-on-dark-soft">{t('home.change24h')}</span>
         </div>
       ) : (
-        <Skeleton className="mt-3 h-12 w-64 bg-surface-dark-elevated" />
+        <Skeleton className="mt-3 h-10 w-56 bg-surface-dark-elevated" />
       )}
+      {/* 코스피 지수 계약이 없어 레버리지 ETF 로 대신하므로, 지수와 다르다는 점을 그 자리에서 알린다 */}
+      {symbol.id === 'KORUUSDT' && <p className="mt-3 max-w-md text-xs leading-relaxed text-on-dark-soft">{t('home.koruNote')}</p>}
     </div>
   )
 }

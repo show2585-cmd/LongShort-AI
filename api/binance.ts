@@ -8,6 +8,8 @@ const UPSTREAM = 'https://fapi.binance.com'
 const ALLOWED_PATHS = [
   'fapi/v1/klines',
   'fapi/v1/ticker/24hr',
+  'fapi/v1/premiumIndex',
+  'fapi/v1/fundingRate',
   'futures/data/globalLongShortAccountRatio',
   'futures/data/topLongShortPositionRatio',
   'futures/data/takerlongshortRatio',

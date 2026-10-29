@@ -55,9 +55,15 @@ export const en: Messages = {
     termsTitle: 'Terms of Service',
     guideTitle: 'Crypto Futures Analysis Guides',
   },
+  market: {
+    krStock: 'Korean stocks',
+    crypto: 'Crypto',
+  },
   home: {
-    hint: 'Tap a timeframe card to switch the chart, long/short ratios and signal breakdown to that timeframe.',
+    change24h: '24h',
     headline: '{{name}} ({{base}}) long/short trend analysis · {{base}}/USDT perpetual',
+    koruNote:
+      'There is no perpetual that tracks the KOSPI index itself, so this shows the KOSPI 3x leveraged ETF (KORU) perpetual. It moves roughly three times as much as the index.',
   },
   guide: {
     intro:
@@ -93,6 +99,8 @@ export const en: Messages = {
     weakDirection: 'Weak direction',
     agree: '<0>{{count}}</0> of {{total}} timeframes agree · higher timeframes weighted more',
     ranging: 'Ranging',
+    tableTitle: 'Trend by timeframe',
+    tableHint: 'Select a row to switch the chart and signal breakdown below',
     longProb: 'long prob.',
     shortProb: 'short prob.',
     breakdownTitle: '{{tf}} signal breakdown',
@@ -134,6 +142,36 @@ export const en: Messages = {
     globalAccount: { title: 'All accounts', hint: 'Share of accounts holding long vs short positions' },
     topPosition: { title: 'Top trader positions', hint: 'Position size ratio of the top 20% accounts by margin' },
     taker: { title: 'Taker buy/sell', hint: 'Market buy vs sell volume' },
+  },
+  fundingOi: {
+    title: 'Funding · Open Interest',
+    description: 'Binance USDT-M futures · live funding rate and 24h open interest change',
+    funding: {
+      title: 'Funding rate',
+      hint: 'Settles every {{hours}}h · positive means longs pay shorts',
+      annual: 'Annualized',
+      next: 'Next settlement in',
+      state: {
+        longHot: 'Longs overheated: holding longs is expensive',
+        neutral: 'Neutral: around the base rate',
+        shortLean: 'Shorts leaning: shorts pay longs',
+        shortHot: 'Shorts overheated: watch for a short squeeze',
+      },
+    },
+    oi: {
+      title: 'Open interest (24h)',
+      hint: 'Size of contracts still open · read together with price direction',
+      oiChange: 'OI change',
+      priceChange: 'Price change',
+      notEnough: 'Not enough data yet to compute the 24h change.',
+      flow: {
+        newLong: { title: 'New longs opening', hint: 'Price and open interest rising together' },
+        shortCover: { title: 'Short covering', hint: 'Price rising while positions shrink' },
+        newShort: { title: 'New shorts opening', hint: 'Price falling while open interest grows' },
+        longExit: { title: 'Long liquidation', hint: 'Price and open interest falling together' },
+      },
+    },
+    note: 'A heavily skewed funding rate, or price and open interest surging together, can precede cascading liquidations in the opposite direction. Use as a supporting signal.',
   },
   liquidation: {
     title: 'Liquidation Map (estimated)',
